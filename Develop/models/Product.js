@@ -2,6 +2,7 @@
 const { Model, DataTypes } = require('sequelize');
 // import our database connection from config.js
 const sequelize = require('../config/connection');
+const { validate } = require('../config/connection');
 
 // Initialize Product model (table) by extending off Sequelize's Model class
 class Product extends Model {}
@@ -20,9 +21,26 @@ Product.init(
 
     price: {
       type: DataTypes.DECIMAL,
-      allowNull: false
-      
-    }
+      allowNull: false,
+      isDecimal: true,
+    },
+
+    stock: {
+      type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          max: [10]
+        },
+        isNumeric: true,
+    },
+
+    category_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: "category",
+        key: "id"
+      }
+    },
   },
   {
     sequelize,
